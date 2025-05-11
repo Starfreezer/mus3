@@ -91,7 +91,13 @@ public class HyperExponential extends RandVar {
 	}
 
 	private void calculateLambdas() {
-		this.lambda1 = (1/mean) * (1 + (Math.sqrt((Math.pow(cvar,2) -1 ) / Math.pow(cvar,2) + 1)));
-		this.lambda2 = (1/mean) * (1 - (Math.sqrt((Math.pow(cvar,2) -1 ) / Math.pow(cvar,2) + 1)));
+
+		double cvarSquared = Math.pow(cvar, 2);
+		double sqrtTerm = Math.sqrt((cvarSquared - 1) / (cvarSquared + 1));
+		double factor = 1.0 / mean;
+
+		this.lambda1 = factor * (1 + sqrtTerm);
+		this.lambda2 = factor * (1 - sqrtTerm);
 	}
+
 }
