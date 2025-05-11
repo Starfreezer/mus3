@@ -3,82 +3,80 @@ package simulation.lib.randVars.continous;
 import simulation.lib.randVars.RandVar;
 import simulation.lib.rng.RNG;
 
-/*
- * TODO Problem 3.1.2 - implement this class (section 3.2.3 in course syllabus)
- * !!! If an abstract class method does not make sense to be implemented in a particular RandVar class,
- * an UnsupportedOperationException should be thrown !!!
- *
- * Erlang-k distributed random variable.
- */
 public class ErlangK extends RandVar {
 
 	private final int k;
-	private final double lambda;
+	private double lambda;
 
 	public ErlangK(RNG rng, int k, double lambda) {
 		super(rng);
+		if (k <= 0) {
+			throw new IllegalArgumentException("k must be > 0 for ErlangK distribution.");
+		}
+		if (lambda <= 0) {
+			throw new IllegalArgumentException("Lambda must be > 0 for ErlangK distribution.");
+		}
 		this.k = k;
 		this.lambda = lambda;
-
 	}
-
-
 
 	@Override
 	public double getRV() {
-		double factor = 1.0 / lambda;
-		double uProd = rng.rnd();
-		for (int i = 1; i < k; i++) {
-			uProd *= rng.rnd();
+		double product = 1.0;
+		for (int i = 0; i < k; i++) {
+			product *= rng.rnd();
 		}
-		return -1.0 * factor * Math.log(uProd);
+		return -Math.log(product) / lambda;
 	}
 
 	@Override
 	public double getMean() {
-		return k/lambda;
+		return k / lambda;
 	}
 
 	@Override
 	public double getVariance() {
-		// TODO Auto-generated method stub
-		return k/Math.pow(lambda, 2);
+		return k / (lambda * lambda);
 	}
 
 	@Override
 	public void setMean(double m) {
-		throw new UnsupportedOperationException("setMean is not supported for ErlangK distributions");
-
-
+		if (m <= 0) {
+			throw new IllegalArgumentException("Mean must be > 0.");
+		}
+		this.lambda = k / m;
 	}
 
 	@Override
 	public void setStdDeviation(double s) {
-		throw new UnsupportedOperationException("setStdDeviation is not supported for ErlangK distributions");
-
-
+		if (s <= 0) {
+			throw new IllegalArgumentException("Standard deviation must be > 0.");
+		}
+		this.lambda = Math.sqrt(k) / s;
 	}
 
 	@Override
 	public void setMeanAndStdDeviation(double m, double s) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("setMeanAndStdDeviation is not supported for ErlangK distributions");
-
-
+		if (m <= 0 || s <= 0) {
+			throw new IllegalArgumentException("Mean and standard deviation must be > 0.");
+		}
+		double expectedMean = s * Math.sqrt(k);
+		if (Math.abs(expectedMean - m) > 1e-9) {
+			throw new IllegalArgumentException("In ErlangK, mean must equal std deviation * sqrt(k).");
+		}
+		this.lambda = k / m;
 	}
 
 	@Override
 	public String getType() {
-		// TODO Auto-generated method stub
 		return "ErlangK";
 	}
 
 	@Override
 	public String toString() {
 		return String.format(
-				"ErlangK distribution with parameters k: %d, λ: %.4f\nMean: %.4f, Variance: %.4f",
+				"ErlangK distribution with parameters k = %d, λ = %.4f\nMean = %.4f, Variance = %.4f",
 				k, lambda, getMean(), getVariance()
 		);
 	}
-
 }
