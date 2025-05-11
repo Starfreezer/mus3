@@ -28,6 +28,7 @@ public class StdRNG extends RNG {
 		 * TODO Problem 3.1.1 - setSeed
 		 * Update the seed of your random number generator rng (Hint: rng can be null @see RNG)
 		 */
+		rng.setSeed(seed);
 	}
 
 	/**
@@ -39,7 +40,10 @@ public class StdRNG extends RNG {
 		 * TODO Problem 3.1.1 - rnd
 		 * Create a random value: 0 < value < 1
 		 */
-		double rv = 0;
+		double rv;
+		do {
+			rv = rng.nextDouble();
+		} while (rv == 0.0); // Just to avoid the very unlikely case rv is 0.
 		return rv;
 	}
 }
