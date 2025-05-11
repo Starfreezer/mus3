@@ -11,58 +11,65 @@ import simulation.lib.rng.RNG;
  * Uniform distributed random variable.
  */
 public class Uniform extends RandVar {
+	private double a;
+	private double b;
 
-	public Uniform(RNG rng) {
+
+	public Uniform(RNG rng, double a, double b) {
 		super(rng);
-		// TODO Auto-generated constructor stub
+		this.a = a;
+		this.b = b;
 	}
 
 	@Override
 	public double getRV() {
-		// TODO Auto-generated method stub
-		return 0;
+		double u = rng.rnd();
+		double x = a + (b -a) * u;
+		return x;
 	}
 
 	@Override
 	public double getMean() {
-		// TODO Auto-generated method stub
-		return 0;
+
+		return (a + b) / 2;
 	}
 
 	@Override
 	public double getVariance() {
-		// TODO Auto-generated method stub
-		return 0;
+		return (Math.pow((b - a), 2))/12;
 	}
 
 	@Override
 	public void setMean(double m) {
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("setMean is not supported for uniform distributions");
 
 	}
 
 	@Override
 	public void setStdDeviation(double s) {
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("setStdDeviation is not supported for uniform distributions");
 
 	}
 
 	@Override
 	public void setMeanAndStdDeviation(double m, double s) {
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("setMeanAndStdDeviation is not supported for uniform distributions");
+
 
 	}
 
 	@Override
 	public String getType() {
-		// TODO Auto-generated method stub
-		return null;
+
+		return "Uniform";
 	}
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		return String.format(
+				"Uniform distribution with parameters a: %.4f, b: %.4f\nMean: %.4f\nVariance: %.4f",
+				a, b, getMean(), getVariance()
+		);
 	}
 	
 }
