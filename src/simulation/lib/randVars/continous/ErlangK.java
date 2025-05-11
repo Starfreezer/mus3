@@ -12,56 +12,73 @@ import simulation.lib.rng.RNG;
  */
 public class ErlangK extends RandVar {
 
-	public ErlangK(RNG rng) {
+	private final int k;
+	private final double lambda;
+
+	public ErlangK(RNG rng, int k, double lambda) {
 		super(rng);
-		// TODO Auto-generated constructor stub
+		this.k = k;
+		this.lambda = lambda;
+
 	}
+
+
 
 	@Override
 	public double getRV() {
-		// TODO Auto-generated method stub
-		return 0;
+		double factor = 1.0 / lambda;
+		double uProd = rng.rnd();
+		for (int i = 1; i < k; i++) {
+			uProd *= rng.rnd();
+		}
+		return -1.0 * factor * Math.log(uProd);
 	}
 
 	@Override
 	public double getMean() {
-		// TODO Auto-generated method stub
-		return 0;
+		return k/lambda;
 	}
 
 	@Override
 	public double getVariance() {
 		// TODO Auto-generated method stub
-		return 0;
+		return k/Math.pow(lambda, 2);
 	}
 
 	@Override
 	public void setMean(double m) {
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("setMean is not supported for ErlangK distributions");
+
 
 	}
 
 	@Override
 	public void setStdDeviation(double s) {
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("setStdDeviation is not supported for ErlangK distributions");
+
 
 	}
 
 	@Override
 	public void setMeanAndStdDeviation(double m, double s) {
 		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("setMeanAndStdDeviation is not supported for ErlangK distributions");
+
 
 	}
 
 	@Override
 	public String getType() {
 		// TODO Auto-generated method stub
-		return null;
+		return "ErlangK";
 	}
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
-	}		
+		return String.format(
+				"ErlangK distribution with parameters k: %d, λ: %.4f\nMean: %.4f, Variance: %.4f",
+				k, lambda, getMean(), getVariance()
+		);
+	}
+
 }
