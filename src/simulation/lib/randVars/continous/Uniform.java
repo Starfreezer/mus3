@@ -11,8 +11,8 @@ import simulation.lib.rng.RNG;
  * Uniform distributed random variable.
  */
 public class Uniform extends RandVar {
-	private final double a;
-	private final double b;
+	private  double a;
+	private  double b;
 
 
 	public Uniform(RNG rng, double a, double b) {
@@ -41,19 +41,33 @@ public class Uniform extends RandVar {
 
 	@Override
 	public void setMean(double m) {
-		throw new UnsupportedOperationException("setMean is not supported for uniform distributions");
+		double range = b - a;
+		this.a = m - range / 2;
+		this.b = m + range / 2;
 
+		if (a >= b) {
+			throw new IllegalArgumentException("Invalid parameters after setting mean: a must be less than b.");
+		}
 	}
 
 	@Override
 	public void setStdDeviation(double s) {
-		throw new UnsupportedOperationException("setStdDeviation is not supported for uniform distributions");
+		if (s <= 0) {
+			throw new IllegalArgumentException("Standard deviation must be positive.");
+		}
 
+		double mean = getMean(); // (a + b)/2
+		double delta = (s * Math.sqrt(12)) / 2;
+
+		this.a = mean - delta;
+		this.b = mean + delta;
 	}
+
 
 	@Override
 	public void setMeanAndStdDeviation(double m, double s) {
-		throw new UnsupportedOperationException("setMeanAndStdDeviation is not supported for uniform distributions");
+		setMean(m);
+		setStdDeviation(s);
 
 
 	}
