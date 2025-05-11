@@ -1,64 +1,61 @@
-/**
- * 
- */
 package simulation.lib.randVars.continous;
 
 import simulation.lib.randVars.RandVar;
 import simulation.lib.rng.RNG;
 
-/*
- * TODO Problem 3.1.2 - implement this class (section 3.2.2 in course syllabus)
- * !!! If an abstract class method does not make sense to be implemented in a particular RandVar class,
- * an UnsupportedOperationException should be thrown !!!
- *
- * Expnential distributed random variable.
- */
 public class Exponential extends RandVar {
-	private final double lambda;
+	private double lambda;
 
 	public Exponential(RNG rng, double lambda) {
 		super(rng);
+		if (lambda <= 0) {
+			throw new IllegalArgumentException("Lambda must be > 0 for Exponential distribution.");
+		}
 		this.lambda = lambda;
-		// TODO Auto-generated constructor stub
 	}
-
 
 	@Override
 	public double getRV() {
 		double u = rng.rnd();
-		double x = (Math.log(u) / lambda);
-		return x;
+		return -Math.log(u) / lambda;
 	}
-
 
 	@Override
 	public double getMean() {
-		return 1/lambda;
+		return 1.0 / lambda;
 	}
 
 	@Override
 	public double getVariance() {
-		return 1/Math.pow(lambda, 2);
+		return 1.0 / (lambda * lambda);
 	}
 
 	@Override
 	public void setMean(double m) {
-		throw new UnsupportedOperationException("setMean not supported on Exponential variables");
-
+		if (m <= 0) {
+			throw new IllegalArgumentException("Mean must be > 0 for Exponential distribution.");
+		}
+		this.lambda = 1.0 / m;
 	}
 
 	@Override
 	public void setStdDeviation(double s) {
-		throw new UnsupportedOperationException("setStdDeviation not supported on Exponential variables");
-
-
+		if (s <= 0) {
+			throw new IllegalArgumentException("Standard deviation must be > 0 for Exponential distribution.");
+		}
+		this.lambda = 1.0 / s;
 	}
 
 	@Override
 	public void setMeanAndStdDeviation(double m, double s) {
-		throw new UnsupportedOperationException("setMeanAndStdDeviation not supported on Exponential variables");
-
-
+		if (m <= 0 || s <= 0) {
+			throw new IllegalArgumentException("Mean and standard deviation must be > 0 for Exponential distribution.");
+		}
+		if (Math.abs(m - s) > 1e-9) {
+			// Since s is the root of the variance and var = 1/lam^2
+			throw new IllegalArgumentException("For an exponential distribution, mean and standard deviation must be equal.");
+		}
+		this.lambda = 1.0 / m;
 	}
 
 	@Override
@@ -69,9 +66,8 @@ public class Exponential extends RandVar {
 	@Override
 	public String toString() {
 		return String.format(
-				"Uniform distribution with parameters lambda: %.4f,\nMean: %.4f\nVariance: %.4f",
+				"Exponential distribution with λ = %.4f\nMean = %.4f\nVariance = %.4f",
 				lambda, getMean(), getVariance()
 		);
 	}
-	
 }
