@@ -11,8 +11,8 @@ import simulation.lib.rng.RNG;
  * Uniform distributed random variable.
  */
 public class Uniform extends RandVar {
-	private double a;
-	private double b;
+	private final double a;
+	private final double b;
 
 
 	public Uniform(RNG rng, double a, double b) {
