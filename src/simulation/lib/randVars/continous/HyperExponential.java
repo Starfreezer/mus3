@@ -25,9 +25,9 @@ public class HyperExponential extends RandVar {
 
 	public HyperExponential(RNG rng, double p1, double p2, double mean, double cvar) {
 		super(rng);
-		if (p1 < 0 || p2 < 0) {
-        	throw new IllegalArgumentException("Probabilities (p1, p2) must be >= 0 for hyperexponential distribution.");
-    	}
+		if (p1 < 0 || p2 < 0 || p1 > 1 || p2 > 1) {
+			throw new IllegalArgumentException("Probabilities (p1, p2) must be >= 0 and <= 1 for hyperexponential distribution.");
+		}
 
     	if (Math.abs(p1 + p2 - 1.0) > 1e-9) {
         	throw new IllegalArgumentException("Probabilities (p1, p2) must sum to 1 for hyperexponential distribution.");
