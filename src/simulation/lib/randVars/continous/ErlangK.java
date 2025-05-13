@@ -71,14 +71,12 @@ public class ErlangK extends RandVar {
 
 	@Override
 	public String getType() {
-		return "ErlangK";
+		return "Erlang-k distribution (Erlang-"+ k +")";
 	}
 
 	@Override
 	public String toString() {
-		return String.format(
-				"ErlangK distribution with parameters k = %d, λ = %.4f\nMean = %.4f, Variance = %.4f, Covariance = %.4f",
-				k, lambda, getMean(), getVariance(), getCvar()
-		);
+		return super.toString() +
+			String.format("\tparameters:\n\t\tlambda: %.4f\n\t\tk: %.4f\n", this.lambda, this.k);
 	}
 }
