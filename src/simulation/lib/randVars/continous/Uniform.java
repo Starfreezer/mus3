@@ -15,20 +15,28 @@ public class Uniform extends RandVar {
 	private  double b;
 
 
-	public Uniform(RNG rng, double a, double b) {
+	public Uniform(double a, double b, RNG rng) {
 		super(rng);
+		if(a >= b)
+			throw new IllegalArgumentException("a must be less than b for uniform distribution.");
 		this.a = a;
 		this.b = b;
 	}
 
+	public Uniform(RNG rng, double mean, double cvar) {
+		super(rng);
+		this.a = mean * (1 - Math.sqrt(3) * cvar);
+		this.b = mean * (1 + Math.sqrt(3) * cvar);
+		if(a >= b)
+			throw new IllegalArgumentException("a must be less than b for uniform distribution.");
+	}
 
 	public Uniform(RNG rng) {
 		super(rng);
 		this.a = 0;
-		this.b = 1;
+		this.b = 2;
 		setMean(1.0);
 	}
-
 
 
 	@Override
@@ -40,7 +48,6 @@ public class Uniform extends RandVar {
 
 	@Override
 	public double getMean() {
-
 		return (a + b) / 2;
 	}
 
@@ -56,14 +63,14 @@ public class Uniform extends RandVar {
 		this.b = m + range / 2;
 
 		if (a >= b) {
-			throw new IllegalArgumentException("Invalid parameters after setting mean: a must be less than b.");
+			throw new IllegalArgumentException("a must be less than b for uniform distribution.");
 		}
 	}
 
 	@Override
 	public void setStdDeviation(double s) {
 		if (s <= 0) {
-			throw new IllegalArgumentException("Standard deviation must be positive.");
+			throw new IllegalArgumentException("Standard deviation must be > 0 for uniform distribution.");
 		}
 
 		double mean = getMean(); // (a + b)/2
@@ -71,6 +78,9 @@ public class Uniform extends RandVar {
 
 		this.a = mean - delta;
 		this.b = mean + delta;
+
+		if(a >= b)
+			throw new IllegalArgumentException("a must be less than b for uniform distribution.");
 	}
 
 
@@ -78,22 +88,17 @@ public class Uniform extends RandVar {
 	public void setMeanAndStdDeviation(double m, double s) {
 		setMean(m);
 		setStdDeviation(s);
-
-
 	}
 
 	@Override
 	public String getType() {
-
-		return "Uniform";
+		return "Uniform distribution";
 	}
 
 	@Override
 	public String toString() {
-		return String.format(
-				"Uniform distribution with parameters a: %.4f, b: %.4f\nMean: %.4f\nVariance: %.4f\nCovariance: %.4f",
-				a, b, getMean(), getVariance(),getCvar()
-		);
+		return super.toString() +
+			String.format("\tparameters:\n\t\ta: %.4f\n\t\tb: %.4f\n", this.a, this.b);
 	}
 	
 }

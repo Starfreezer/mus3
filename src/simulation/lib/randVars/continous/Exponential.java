@@ -6,7 +6,7 @@ import simulation.lib.rng.RNG;
 public class Exponential extends RandVar {
 	private double lambda;
 
-	public Exponential(RNG rng, double lambda) {
+	public Exponential(double lambda, RNG rng) {
 		super(rng);
 		if (lambda <= 0) {
 			throw new IllegalArgumentException("Lambda must be > 0 for Exponential distribution.");
@@ -19,6 +19,23 @@ public class Exponential extends RandVar {
 		this.lambda = 1.0;
 	}
 
+	public Exponential(RNG rng, double mean) {
+		super(rng);
+		setMean(mean);
+	}
+
+	public Exponential(RNG rng, double mean, double cvar) {
+		super(rng);
+		if (cvar != 1.0) {
+			throw new UnsupportedOperationException("Cvar must be 1.0 for Exponential distribution.");
+		}
+		setMean(mean);
+	}
+
+	public Exponential(double mean, double sdev, RNG rng) {
+		super(rng);
+		setMeanAndStdDeviation(mean, sdev);
+	}
 
 	@Override
 	public double getRV() {
@@ -57,23 +74,20 @@ public class Exponential extends RandVar {
 		if (m <= 0 || s <= 0) {
 			throw new IllegalArgumentException("Mean and standard deviation must be > 0 for Exponential distribution.");
 		}
-		if (Math.abs(m - s) > 1e-9) {
-			// Since s is the root of the variance and var = 1/lam^2
-			throw new IllegalArgumentException("For an exponential distribution, mean and standard deviation must be equal.");
-		}
+		if (m != s)
+			throw new UnsupportedOperationException("Mean must be equal to standard deviation for exponential distribution.");
+			
 		this.lambda = 1.0 / m;
 	}
 
 	@Override
 	public String getType() {
-		return "Exponential";
+		return "Exponential distribution";
 	}
 
 	@Override
 	public String toString() {
-		return String.format(
-				"Exponential distribution with λ = %.4f\nMean = %.4f\nVariance = %.4f\nCovariance = %.4f",
-				lambda, getMean(), getVariance(),getCvar()
-		);
+		return super.toString() + 
+			String.format("\tparameters:\n\t\tlambda: %.4f\n", this.lambda);
 	}
 }
