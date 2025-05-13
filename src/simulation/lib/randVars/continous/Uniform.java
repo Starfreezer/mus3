@@ -17,6 +17,8 @@ public class Uniform extends RandVar {
 
 	public Uniform(RNG rng, double a, double b) {
 		super(rng);
+		if(a >= b)
+			throw new IllegalArgumentException("a must be smaller than b for uniform distribution");
 		this.a = a;
 		this.b = b;
 	}
