@@ -18,7 +18,7 @@ public class Uniform extends RandVar {
 	public Uniform(double a, double b, RNG rng) {
 		super(rng);
 		if(a >= b)
-			throw new IllegalArgumentException("a must be less than b for uniform distribution");
+			throw new IllegalArgumentException("a must be less than b for uniform distribution.");
 		this.a = a;
 		this.b = b;
 	}
@@ -28,7 +28,7 @@ public class Uniform extends RandVar {
 		this.a = mean * (1 - Math.sqrt(3) * cvar);
 		this.b = mean * (1 + Math.sqrt(3) * cvar);
 		if(a >= b)
-			throw new IllegalArgumentException("a must be less than b for uniform distribution");
+			throw new IllegalArgumentException("a must be less than b for uniform distribution.");
 	}
 
 	public Uniform(RNG rng) {
