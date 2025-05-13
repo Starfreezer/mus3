@@ -72,6 +72,5 @@ public class Exponential extends RandVar {
 	public String toString() {
 		return super.toString() + 
 			String.format("\tparameters:\n\t\tlambda: %.4f\n", this.lambda);
-		}
 	}
 }
