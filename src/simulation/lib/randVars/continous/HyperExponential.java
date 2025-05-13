@@ -70,7 +70,18 @@ public class HyperExponential extends RandVar {
 
 	@Override
 	public void setStdDeviation(double s) {
-		throw new UnsupportedOperationException("StdDeviation not supported.");
+		if (s <= 0) {
+			throw new IllegalArgumentException("Standard deviation must be > 0 for hyperexponential distribution.");
+		}
+
+		double cvar = s / this.mean;
+		// If cvar is 1, then the distribution reduces to a standard exponential, see calculateLambdas()
+		if (this.cvar < 1) {
+			throw new IllegalArgumentException("Coefficient of variation must be >= 1 for hyperexponential distribution.");
+		}
+
+		this.cvar = cvar;
+		calculateLambdas();
 	}
 
 
@@ -85,7 +96,7 @@ public class HyperExponential extends RandVar {
 		if (cvar < 1) {
 			throw new IllegalArgumentException("Coefficient of variation must be >= 1 for hyperexponential distribution.");
 		}
-		
+
 		this.cvar = cvar;
 		this.mean = m;
 		calculateLambdas();
