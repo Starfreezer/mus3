@@ -65,19 +65,12 @@ public class HyperExponential extends RandVar {
 
 	@Override
 	public void setMean(double m) {
-		if (m <= 0) throw new IllegalArgumentException("Mean must be positive.");
-		this.mean = m;
-		calculateLambdas();
-
+		throw new UnsupportedOperationException("Nah");
 	}
 
 	@Override
 	public void setStdDeviation(double s) {
-		if (s <= 0) throw new IllegalArgumentException("Standard deviation must be positive.");
-		if (mean <= 0) throw new IllegalStateException("Mean must be set before setting standard deviation.");
-
-		this.cvar = s / mean;
-		calculateLambdas();
+		throw new UnsupportedOperationException("StdDeviation not supported.");
 	}
 
 
@@ -133,7 +126,6 @@ public class HyperExponential extends RandVar {
 		/**
 		 * See PDF for derivation
 		 */
-
 		double p1 = (lambda1 * (mean*lambda2 - 1)) / (lambda2 - lambda1);
 		double p2 = 1 - p1;
 

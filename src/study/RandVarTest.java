@@ -16,9 +16,9 @@ import java.util.Random;
 
 /**
     Stuff that can not be instantiated
-    Exponential: Exponential cvar always needs to be 1. Thus cvar 0.1 and 2 cannot be instantiated.
-    ErlangK: Cvar always <= 1. Thus cannot instantiate cvar 2;
-    H2: Cvar always >= 1. Thus cannot instaniate cvar 0.1
+    Exponential: Exponential cvar always needs to be 1. Thus, cvar 0.1 and 2 cannot be instantiated.
+    ErlangK: Cvar always <= 1. Thus, cannot instantiate cvar 2;
+    H2: Cvar always >= 1. Thus, cannot instantiate cvar 0.1
  */
 
 
