@@ -43,12 +43,18 @@ public class ErlangK extends RandVar {
 
 	@Override
 	public void setMean(double m) {
-		throw new UnsupportedOperationException("ErlangK does not support setMean.");
+		if (m <= 0) {
+			throw new IllegalArgumentException("Mean must be > 0 for ErlangK distribution.");
+		}
+		this.lambda = this.k / m;
 	}
 
 	@Override
 	public void setStdDeviation(double s) {
-		throw new UnsupportedOperationException("setStdDeviation not supported.");
+		if (s <= 0) {
+			throw new IllegalArgumentException("Standard deviation must be > 0 for ErlangK distribution.");
+		}
+		this.lambda = Math.sqrt(this.k) / s;
 	}
 
 	public void setMeanAndCvar(double mean, double cvar) {
@@ -63,8 +69,11 @@ public class ErlangK extends RandVar {
 
 	@Override
 	public void setMeanAndStdDeviation(double m, double s) {
-		if (m <= 0 || s <= 0)
-			throw new IllegalArgumentException("Mean and std deviation must be > 0.");
+		if (m <= 0 || s <= 0) {
+			throw new IllegalArgumentException("Mean and standard deviation must be > 0 for ErlangK distribution.");
+		}
+
+
 		double cvar = s / m;
 		setMeanAndCvar(m, cvar);
 	}
