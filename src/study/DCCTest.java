@@ -41,13 +41,17 @@ public class DCCTest {
                 dict.put((int) sample,0);
             }
 
-            Normal normal = new Normal(rng,mean,variance);
+            /**
+             * Change randvar here to appropriate dist
+             * Too lazy to extract function
+             */
+            Normal randVar = new Normal(rng,mean,variance);
 
             for (int i = 0; i < nExperiments; i++) {
                 for(int nSample : nSamples) {
                     DiscreteConfidenceCounter discreteConfidenceCounter = new DiscreteConfidenceCounter("Var",alpha);
                     for(int j=0;j<nSample;j++) {
-                        discreteConfidenceCounter.count(normal.getRV());
+                        discreteConfidenceCounter.count(randVar.getRV());
                     }
                     if(mean >= discreteConfidenceCounter.getLowerBound() && mean <= discreteConfidenceCounter.getUpperBound()) {
                         dict.put(nSample,dict.get(nSample) + 1);
