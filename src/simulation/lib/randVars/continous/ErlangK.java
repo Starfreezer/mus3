@@ -58,8 +58,8 @@ public class ErlangK extends RandVar {
 	}
 
 	public void setMeanAndCvar(double mean, double cvar) {
-		if (mean <= 0 || cvar <= 0)
-			throw new IllegalArgumentException("Mean and CV must be > 0.");
+		if (mean <= 0 || cvar <= 0 || cvar > 1)
+			throw new IllegalArgumentException("Mean must be > 0 and Coefficient of variation must be <= 1 and > 0 for ErlangK distribution.");
 
 		// For Erlang-k: CV = 1 / sqrt(k)
 		int optimalK = (int) Math.ceil(1.0 / (cvar * cvar));
@@ -72,9 +72,11 @@ public class ErlangK extends RandVar {
 		if (m <= 0 || s <= 0) {
 			throw new IllegalArgumentException("Mean and standard deviation must be > 0 for ErlangK distribution.");
 		}
-
-
 		double cvar = s / m;
+		// If cvar is 1, then the distribution reduces to a standard exponential
+		if (cvar > 1 || cvar <= 0) {
+			throw new IllegalArgumentException("Coefficient of variation must be <= 1 and > 0 for ErlangK distribution.");
+		}
 		setMeanAndCvar(m, cvar);
 	}
 
