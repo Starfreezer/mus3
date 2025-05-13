@@ -69,6 +69,7 @@ public class DCCTest {
                 System.out.println();
             } catch (Exception e) {
                 e.printStackTrace();
+                // Lord forgive me for this hack i am lazy
                 skipIter = 1;
             }
         }
