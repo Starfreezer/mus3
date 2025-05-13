@@ -28,7 +28,12 @@ public class StdRNG extends RNG {
 		 * TODO Problem 3.1.1 - setSeed
 		 * Update the seed of your random number generator rng (Hint: rng can be null @see RNG)
 		 */
-		rng.setSeed(seed);
+		if(rng == null) {
+			rng = new Random(seed);
+		}
+		else {
+			rng.setSeed(seed);
+		}
 	}
 
 	/**

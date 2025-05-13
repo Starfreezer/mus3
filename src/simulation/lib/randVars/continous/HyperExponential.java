@@ -32,6 +32,12 @@ public class HyperExponential extends RandVar {
 		calculateLambdas();
 	}
 
+	public HyperExponential(RNG rng, double mean, double cvar) {
+		super(rng);
+		this.setMeanAndCvar(mean, cvar);
+
+	}
+
 	@Override
 	public double getRV() {
 		double u1 = rng.rnd();
@@ -104,12 +110,35 @@ public class HyperExponential extends RandVar {
 
 	private void calculateLambdas() {
 
+		// If CV = 1, then the distribution reduces to a standard exponential:
+		// The variance equals the square of the mean, so lambda1 = lambda2 = 1/mean.
+		// Any mixture of identical exoponential is just a single exponential.
+		if (Math.abs(cvar - 1.0) < 1e-6) {
+			this.lambda1 = 1.0 / mean;
+			this.lambda2 = this.lambda1;
+			this.p1 = 0.5;
+			this.p2 = 0.5;
+			return;
+		}
+
 		double cvarSquared = Math.pow(cvar, 2);
+
+
 		double sqrtTerm = Math.sqrt((cvarSquared - 1) / (cvarSquared + 1));
 		double factor = 1.0 / mean;
 
 		this.lambda1 = factor * (1 + sqrtTerm);
 		this.lambda2 = factor * (1 - sqrtTerm);
+
+		/**
+		 * See PDF for derivation
+		 */
+
+		double p1 = (lambda1 * (mean*lambda2 - 1)) / (lambda2 - lambda1);
+		double p2 = 1 - p1;
+
+		this.p1 = p1;
+		this.p2 = p2;
 	}
 
 }

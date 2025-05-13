@@ -10,6 +10,7 @@ public class DCCTest {
     }
 
     public static void testDCC() {
-        // TODO Auto-generated method stub
+        RandVarTest test = new RandVarTest();
+        test.runTest();
     }
 }

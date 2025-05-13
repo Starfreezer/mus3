@@ -26,6 +26,7 @@ public class Uniform extends RandVar {
 		super(rng);
 		this.a = 0;
 		this.b = 1;
+		setMean(1.0);
 	}
 
 
@@ -90,8 +91,8 @@ public class Uniform extends RandVar {
 	@Override
 	public String toString() {
 		return String.format(
-				"Uniform distribution with parameters a: %.4f, b: %.4f\nMean: %.4f\nVariance: %.4f",
-				a, b, getMean(), getVariance()
+				"Uniform distribution with parameters a: %.4f, b: %.4f\nMean: %.4f\nVariance: %.4f\nCovariance: %.4f",
+				a, b, getMean(), getVariance(),getCvar()
 		);
 	}
 	

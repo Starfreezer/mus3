@@ -72,8 +72,8 @@ public class Exponential extends RandVar {
 	@Override
 	public String toString() {
 		return String.format(
-				"Exponential distribution with λ = %.4f\nMean = %.4f\nVariance = %.4f",
-				lambda, getMean(), getVariance()
+				"Exponential distribution with λ = %.4f\nMean = %.4f\nVariance = %.4f\nCovariance = %.4f",
+				lambda, getMean(), getVariance(),getCvar()
 		);
 	}
 }
