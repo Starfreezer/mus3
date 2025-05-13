@@ -32,7 +32,6 @@ public class Uniform extends RandVar {
 	}
 
 
-
 	@Override
 	public double getRV() {
 		double u = rng.rnd();
@@ -42,7 +41,6 @@ public class Uniform extends RandVar {
 
 	@Override
 	public double getMean() {
-
 		return (a + b) / 2;
 	}
 
@@ -58,14 +56,14 @@ public class Uniform extends RandVar {
 		this.b = m + range / 2;
 
 		if (a >= b) {
-			throw new IllegalArgumentException("Invalid parameters after setting mean: a must be less than b.");
+			throw new IllegalArgumentException("a must be less than b for uniform distribution.");
 		}
 	}
 
 	@Override
 	public void setStdDeviation(double s) {
 		if (s <= 0) {
-			throw new IllegalArgumentException("Standard deviation must be positive.");
+			throw new IllegalArgumentException("Standard deviation must be > 0 for uniform distribution.");
 		}
 
 		double mean = getMean(); // (a + b)/2
@@ -73,6 +71,9 @@ public class Uniform extends RandVar {
 
 		this.a = mean - delta;
 		this.b = mean + delta;
+
+		if(a >= b)
+			throw new IllegalArgumentException("a must be less than b for uniform distribution.");
 	}
 
 
@@ -80,14 +81,11 @@ public class Uniform extends RandVar {
 	public void setMeanAndStdDeviation(double m, double s) {
 		setMean(m);
 		setStdDeviation(s);
-
-
 	}
 
 	@Override
 	public String getType() {
-
-		return "Uniform";
+		return "Uniform distribution";
 	}
 
 	@Override
