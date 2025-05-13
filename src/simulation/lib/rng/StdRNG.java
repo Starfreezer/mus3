@@ -48,7 +48,7 @@ public class StdRNG extends RNG {
 		double rv;
 		do {
 			rv = rng.nextDouble();
-		} while (rv == 0.0); // Just to avoid the very unlikely case rv is 0.
+		} while (rv == 0.0 || rv == 1); // Just to avoid the very unlikely case rv is 0 or 1
 		return rv;
 	}
 }
