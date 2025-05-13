@@ -65,7 +65,11 @@ public class HyperExponential extends RandVar {
 
 	@Override
 	public void setMean(double m) {
-		throw new UnsupportedOperationException("Nah");
+		if (m <= 0) {
+			throw new IllegalArgumentException("Mean must be > 0 for hyperexponential distribution.");
+		}
+		this.mean = m;
+		calculateLambdas();
 	}
 
 	@Override
