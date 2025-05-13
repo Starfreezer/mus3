@@ -57,10 +57,9 @@ public class Exponential extends RandVar {
 		if (m <= 0 || s <= 0) {
 			throw new IllegalArgumentException("Mean and standard deviation must be > 0 for Exponential distribution.");
 		}
-		if (Math.abs(m - s) > 1e-9) {
-			// Since s is the root of the variance and var = 1/lam^2
-			throw new IllegalArgumentException("For an exponential distribution, mean and standard deviation must be equal.");
-		}
+		if (m != s)
+			throw new UnsupportedOperationException("Mean must be equal to standard deviation for exponential distribution.");
+			
 		this.lambda = 1.0 / m;
 	}
 
