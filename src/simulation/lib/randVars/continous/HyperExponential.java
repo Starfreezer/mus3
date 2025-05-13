@@ -86,19 +86,15 @@ public class HyperExponential extends RandVar {
 
 	@Override
 	public String getType() {
-		return "HyperExponential(H2)";
+		return "Hyperexponential distribution (H2)";
 	}
 
 
 	@Override
 	public String toString() {
-		return String.format(
-				"HyperExponential (H2) Distribution\n" +
-						"p1: %.4f, p2: %.4f\n" +
-						"λ1: %.4f, λ2: %.4f\n" +
-						"Mean: %.4f, Variance: %.4f, CV: %.4f",
-				p1, p2, lambda1, lambda2, getMean(), getVariance(), cvar
-		);
+		return super.toString() +
+			String.format("\tparameters:\n\t\tp1: %.4f\n\t\tp2: %.4f\n\t\tlambda1: %.4f\n\t\tlambda2: %.4f\n",
+					  this.p1, this.p2, this.lambda1, this.lambda2);
 	}
 
 	private void calculateLambdas() {
