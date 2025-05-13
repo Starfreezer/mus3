@@ -25,6 +25,24 @@ public class HyperExponential extends RandVar {
 
 	public HyperExponential(RNG rng, double p1, double p2, double mean, double cvar) {
 		super(rng);
+		if (p1 < 0 || p2 < 0) {
+        	throw new IllegalArgumentException("Probabilities (p1, p2) must be >= 0 for hyperexponential distribution.");
+    	}
+
+    	if (Math.abs(p1 + p2 - 1.0) > 1e-9) {
+        	throw new IllegalArgumentException("Probabilities (p1, p2) must sum to 1 for hyperexponential distribution.");
+   		}
+
+		// If cvar is 1, then the distribution reduces to a standard exponential, see calculateLambdas()
+		if (cvar < 1) {
+			throw new IllegalArgumentException("Coefficient of variation must be > 1 for hyperexponential distribution.");
+		}
+
+		if (mean <= 0) {
+			throw new IllegalArgumentException("Mean must be > 0 for hyperexponential distribution.");
+		}
+
+
 		this.p1 = p1;
 		this.p2 = p2;
 		this.mean = mean;
@@ -35,7 +53,6 @@ public class HyperExponential extends RandVar {
 	public HyperExponential(RNG rng, double mean, double cvar) {
 		super(rng);
 		this.setMeanAndCvar(mean, cvar);
-
 	}
 
 	@Override
