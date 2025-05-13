@@ -76,10 +76,18 @@ public class HyperExponential extends RandVar {
 
 	@Override
 	public void setMeanAndStdDeviation(double m, double s) {
-		if (m <= 0 || s <= 0)
-			throw new IllegalArgumentException("Mean and standard deviation must be positive.");
+		if (m <= 0 || s <= 0) {
+        	throw new IllegalArgumentException("Mean and standard deviation must be > 0 for hyperexponential distribution.");
+    	}
+
+		double cvar = s / m;
+		// If cvar is 1, then the distribution reduces to a standard exponential, see calculateLambdas()
+		if (cvar < 1) {
+			throw new IllegalArgumentException("Coefficient of variation must be >= 1 for hyperexponential distribution.");
+		}
+		
+		this.cvar = cvar;
 		this.mean = m;
-		this.cvar = s / m;
 		calculateLambdas();
 	}
 
@@ -102,6 +110,7 @@ public class HyperExponential extends RandVar {
 		// If CV = 1, then the distribution reduces to a standard exponential:
 		// The variance equals the square of the mean, so lambda1 = lambda2 = 1/mean.
 		// Any mixture of identical exoponential is just a single exponential.
+		// cvar == 1.0
 		if (Math.abs(cvar - 1.0) < 1e-6) {
 			this.lambda1 = 1.0 / mean;
 			this.lambda2 = this.lambda1;
