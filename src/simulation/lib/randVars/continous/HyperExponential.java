@@ -11,6 +11,10 @@ import static java.lang.Math.*;
  *
  * Hyperexponential distributed random variable.
  */
+
+/**
+ * I don't see why setStdDeviation and setMean could not be implemented. Assuming we are always dealing with an H2 dist.
+ */
 public class HyperExponential extends RandVar {
 	private double p1;
 	private double p2;
@@ -55,6 +59,7 @@ public class HyperExponential extends RandVar {
 
 	@Override
 	public void setMean(double m) {
+		if (m <= 0) throw new IllegalArgumentException("Mean must be positive.");
 		this.mean = m;
 		calculateLambdas();
 
@@ -62,16 +67,23 @@ public class HyperExponential extends RandVar {
 
 	@Override
 	public void setStdDeviation(double s) {
-		throw new UnsupportedOperationException("Not supported on HyperExponential");
+		if (s <= 0) throw new IllegalArgumentException("Standard deviation must be positive.");
+		if (mean <= 0) throw new IllegalStateException("Mean must be set before setting standard deviation.");
 
+		this.cvar = s / mean;
+		calculateLambdas();
 	}
+
 
 	@Override
-	// TODO: This should work, but too lazy rn fix it later.
 	public void setMeanAndStdDeviation(double m, double s) {
-		// TODO Auto-generated method stub
-
+		if (m <= 0 || s <= 0)
+			throw new IllegalArgumentException("Mean and standard deviation must be positive.");
+		this.mean = m;
+		this.cvar = s / m;
+		calculateLambdas();
 	}
+
 
 	@Override
 	public String getType() {
