@@ -6,7 +6,7 @@ import simulation.lib.rng.RNG;
 public class Exponential extends RandVar {
 	private double lambda;
 
-	public Exponential(RNG rng, double lambda) {
+	public Exponential(double lambda, RNG rng) {
 		super(rng);
 		if (lambda <= 0) {
 			throw new IllegalArgumentException("Lambda must be > 0 for Exponential distribution.");
@@ -19,6 +19,19 @@ public class Exponential extends RandVar {
 		this.lambda = 1.0;
 	}
 
+	public Exponential(RNG rng, double mean) {
+		super(rng);
+		setMean(mean);
+	}
+
+	public Exponential(RNG rng, double mean, double cvar) {
+		super(rng);
+		if (cvar != 1.0) {
+			throw new UnsupportedOperationException("Cvar must be 1.0 for Exponential distribution.");
+		}
+
+		setMean(mean);
+	}
 
 	@Override
 	public double getRV() {
