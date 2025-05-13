@@ -27,40 +27,47 @@ public class RandVarTest {
     private List<RandVar> vars;
     private DiscreteCounter counter;
     private StdRNG rng;
+    private double mean = 1.0;
     private double[] cvars = {0.1,1.0,2.0};
 
     public RandVarTest() {
         this.n = (int) Math.pow(10,6);
         this.rng = new  StdRNG();
+        this.mean = 1.0;
         this.vars = new ArrayList<RandVar>();
         for (double v : cvars) {
+            try {
+                Uniform uniform = new Uniform(rng, mean, v);
+                vars.add(uniform);
+            } catch (Exception e) {
+                System.err.println("Error occurred with uniform distribution for mean: " + mean + " and cvar: " + v);
+                System.err.println("Error message: " + e.getMessage() + "\n\n\n");
+            }
 
-            Uniform uniform = new Uniform(rng);
-            uniform.setMean(1.0);
-            uniform.setCvar(v);
-            vars.add(uniform);
-
-            if(v == 1.0){
-                Exponential exponential = new Exponential(rng);
-                exponential.setMean(1.0);
-                exponential.setCvar(v);
+            try {
+                Exponential exponential = new Exponential(rng, mean, v);
                 vars.add(exponential);
+            } catch (Exception e) {
+                System.err.println("Error occurred with exponential distribution for mean: " + mean + " and cvar: " + v);
+                System.err.println("Error message: " + e.getMessage() + "\n\n\n");
             }
 
-            if(v <= 1.0){
-                ErlangK erlangK = new ErlangK(rng);
-                erlangK.setMeanAndStdDeviation(1.0,v);
+            try {
+                ErlangK erlangK = new ErlangK(rng, mean, v);
                 vars.add(erlangK);
+            } catch (Exception e) {
+                System.err.println("Error occurred with Erlang-k distribution for mean: " + mean + " and cvar: " + v);
+                System.err.println("Error message: " + e.getMessage() + "\n\n\n");
             }
 
-            if(v >= 1.0){
-                HyperExponential hyperExponential = new HyperExponential(rng,1.0,v);
+            try {
+                HyperExponential hyperExponential = new HyperExponential(rng, mean, v);
                 vars.add(hyperExponential);
+            } catch (Exception e) {
+                System.err.println("Error occurred with hyperexponential distribution for mean: " + mean + " and cvar: " + v);
+                System.err.println("Error message: " + e.getMessage() + "\n\n\n");
             }
-
         }
-
-
     }
 
 
