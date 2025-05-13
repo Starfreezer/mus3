@@ -21,6 +21,15 @@ public class Uniform extends RandVar {
 		this.b = b;
 	}
 
+
+	public Uniform(RNG rng) {
+		super(rng);
+		this.a = 0;
+		this.b = 1;
+	}
+
+
+
 	@Override
 	public double getRV() {
 		double u = rng.rnd();

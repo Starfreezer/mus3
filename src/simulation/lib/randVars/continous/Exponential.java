@@ -14,6 +14,12 @@ public class Exponential extends RandVar {
 		this.lambda = lambda;
 	}
 
+	public Exponential(RNG rng) {
+		super(rng);
+		this.lambda = 1.0;
+	}
+
+
 	@Override
 	public double getRV() {
 		double u = rng.rnd();
