@@ -27,7 +27,7 @@ public class Uniform extends RandVar {
 	public Uniform(RNG rng) {
 		super(rng);
 		this.a = 0;
-		this.b = 1;
+		this.b = 2;
 		setMean(1.0);
 	}
 
