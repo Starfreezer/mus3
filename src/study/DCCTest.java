@@ -2,6 +2,7 @@ package study;
 
 import simulation.lib.counter.DiscreteConfidenceCounter;
 import simulation.lib.counter.DiscreteCounter;
+import simulation.lib.randVars.continous.HyperExponential;
 import simulation.lib.randVars.continous.Normal;
 import simulation.lib.rng.StdRNG;
 
@@ -26,7 +27,7 @@ public class DCCTest {
     private static void studentTest() {
         double mean = 10.0;
         double alpha = 0.05;
-        double[] variances = {0.25,0.5,1.0,2.0,4.0};
+        double[] cvars = {0.25,0.5,1.0,2.0,4.0};
         int[] nSamples = {5,10,50,100};
 
 
@@ -35,17 +36,18 @@ public class DCCTest {
         int nExperiments = 500;
 
 
-        for (double variance : variances) {
+        for (double cvar : cvars) {
             Dictionary<Integer,Integer> dict = new Hashtable<Integer,Integer>();
             for(int sample:nSamples) {
-                dict.put((int) sample,0);
+                dict.put(sample,0);
             }
 
             /**
              * Change randvar here to appropriate dist
              * Too lazy to extract function
              */
-            Normal randVar = new Normal(rng,mean,variance);
+            Normal randVar = new Normal(rng);
+            randVar.setMeanAndCvar(mean, cvar);
 
             for (int i = 0; i < nExperiments; i++) {
                 for(int nSample : nSamples) {
@@ -59,17 +61,17 @@ public class DCCTest {
 
                 }
             }
-            System.out.println(nExperiments + " experiments. With variance " + variance + " and alpha " + alpha );
+            System.out.println(nExperiments + " experiments. With cvar " + cvar + " and alpha " + alpha );
             System.out.println(dict);
             System.out.println();
         }
 
 
         alpha = 0.10;
-        for (double variance : variances) {
+        for (double variance : cvars) {
             Dictionary<Integer,Integer> dict = new Hashtable<Integer,Integer>();
             for(int sample:nSamples) {
-                dict.put((int) sample,0);
+                dict.put(sample,0);
             }
 
             Normal normal = new Normal(rng,mean,variance);
@@ -86,7 +88,7 @@ public class DCCTest {
 
                 }
             }
-            System.out.println(nExperiments + " experiments. With variance " + variance + " and alpha " + alpha );
+            System.out.println(nExperiments + " experiments. With cvar " + variance + " and alpha " + alpha );
             System.out.println(dict);
             System.out.println();
         }
