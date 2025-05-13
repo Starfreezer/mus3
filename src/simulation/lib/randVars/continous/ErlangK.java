@@ -95,6 +95,6 @@ public class ErlangK extends RandVar {
 	@Override
 	public String toString() {
 		return super.toString() +
-			String.format("\tparameters:\n\t\tlambda: %.4f\n\t\tk: %.4f\n", this.lambda, this.k);
+			String.format("\tparameters:\n\t\tlambda: %.4f\n\t\tk: %d\n", this.lambda, this.k);
 	}
 }
