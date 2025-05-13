@@ -29,8 +29,12 @@ public class Exponential extends RandVar {
 		if (cvar != 1.0) {
 			throw new UnsupportedOperationException("Cvar must be 1.0 for Exponential distribution.");
 		}
-
 		setMean(mean);
+	}
+
+	public Exponential(double mean, double sdev, RNG rng) {
+		super(rng);
+		setMeanAndStdDeviation(mean, sdev);
 	}
 
 	@Override
