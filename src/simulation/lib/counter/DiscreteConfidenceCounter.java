@@ -71,7 +71,7 @@ public class DiscreteConfidenceCounter extends DiscreteCounter {
 
 
 
-
+    // Formula taken from https://en.wikipedia.org/wiki/Linear_interpolation
     private double linearInterpolate(double dflow, double dfhigh, double tlow, double thigh, double degsOfFreedem) {
         return dfhigh + (thigh - dfhigh) * ((degsOfFreedem - dflow) / (tlow - dflow));
     }
