@@ -2,6 +2,7 @@ package study;
 
 import simulation.lib.counter.DiscreteConfidenceCounter;
 import simulation.lib.counter.DiscreteCounter;
+import simulation.lib.randVars.continous.Exponential;
 import simulation.lib.randVars.continous.HyperExponential;
 import simulation.lib.randVars.continous.Normal;
 import simulation.lib.rng.StdRNG;
@@ -27,74 +28,80 @@ public class DCCTest {
     private static void studentTest() {
         double mean = 10.0;
         double alpha = 0.05;
-        double[] cvars = {0.25,0.5,1.0,2.0,4.0};
-        int[] nSamples = {5,10,50,100};
-
+        double[] cvars = {0.25, 0.5, 1.0, 2.0, 4.0};
+        int[] nSamples = {5, 10, 50, 100};
 
 
         StdRNG rng = new StdRNG();
         int nExperiments = 500;
+        int skipIter = 0;
 
 
         for (double cvar : cvars) {
-            Dictionary<Integer,Integer> dict = new Hashtable<Integer,Integer>();
-            for(int sample:nSamples) {
-                dict.put(sample,0);
-            }
-
-            /**
-             * Change randvar here to appropriate dist
-             * Too lazy to extract function
-             */
-            Normal randVar = new Normal(rng);
-            randVar.setMeanAndCvar(mean, cvar);
-
-            for (int i = 0; i < nExperiments; i++) {
-                for(int nSample : nSamples) {
-                    DiscreteConfidenceCounter discreteConfidenceCounter = new DiscreteConfidenceCounter("Var",alpha);
-                    for(int j=0;j<nSample;j++) {
-                        discreteConfidenceCounter.count(randVar.getRV());
-                    }
-                    if(mean >= discreteConfidenceCounter.getLowerBound() && mean <= discreteConfidenceCounter.getUpperBound()) {
-                        dict.put(nSample,dict.get(nSample) + 1);
-                    }
-
+            skipIter = 0;
+            try {
+                Dictionary<Integer, Integer> dict = new Hashtable<Integer, Integer>();
+                for (int sample : nSamples) {
+                    dict.put(sample, 0);
                 }
+
+                /**
+                 * Change randvar here to appropriate dist
+                 * Too lazy to extract function
+                 */
+                Exponential randVar = new Exponential(rng);
+                randVar.setMeanAndCvar(mean, cvar);
+
+                for (int i = 0; i < nExperiments; i++) {
+                    for (int nSample : nSamples) {
+                        DiscreteConfidenceCounter discreteConfidenceCounter = new DiscreteConfidenceCounter("Var", alpha);
+                        for (int j = 0; j < nSample; j++) {
+                            discreteConfidenceCounter.count(randVar.getRV());
+                        }
+                        if (mean >= discreteConfidenceCounter.getLowerBound() && mean <= discreteConfidenceCounter.getUpperBound()) {
+                            dict.put(nSample, dict.get(nSample) + 1);
+                        }
+
+                    }
+                }
+                System.out.println(nExperiments + " experiments. With cvar " + cvar + " and alpha " + alpha);
+                System.out.println(dict);
+                System.out.println();
+            } catch (Exception e) {
+                e.printStackTrace();
+                skipIter = 1;
             }
-            System.out.println(nExperiments + " experiments. With cvar " + cvar + " and alpha " + alpha );
-            System.out.println(dict);
-            System.out.println();
         }
 
-
-        alpha = 0.10;
-        for (double variance : cvars) {
-            Dictionary<Integer,Integer> dict = new Hashtable<Integer,Integer>();
-            for(int sample:nSamples) {
-                dict.put(sample,0);
-            }
-
-            Normal normal = new Normal(rng,mean,variance);
-
-            for (int i = 0; i < nExperiments; i++) {
-                for(int nSample : nSamples) {
-                    DiscreteConfidenceCounter discreteConfidenceCounter = new DiscreteConfidenceCounter("Var",alpha);
-                    for(int j=0;j<nSample;j++) {
-                        discreteConfidenceCounter.count(normal.getRV());
-                    }
-                    if(mean >= discreteConfidenceCounter.getLowerBound() && mean <= discreteConfidenceCounter.getUpperBound()) {
-                        dict.put(nSample,dict.get(nSample) + 1);
-                    }
-
+        if (skipIter != 1) {
+            alpha = 0.10;
+            for (double variance : cvars) {
+                Dictionary<Integer, Integer> dict = new Hashtable<Integer, Integer>();
+                for (int sample : nSamples) {
+                    dict.put(sample, 0);
                 }
+
+                Normal normal = new Normal(rng, mean, variance);
+
+                for (int i = 0; i < nExperiments; i++) {
+                    for (int nSample : nSamples) {
+                        DiscreteConfidenceCounter discreteConfidenceCounter = new DiscreteConfidenceCounter("Var", alpha);
+                        for (int j = 0; j < nSample; j++) {
+                            discreteConfidenceCounter.count(normal.getRV());
+                        }
+                        if (mean >= discreteConfidenceCounter.getLowerBound() && mean <= discreteConfidenceCounter.getUpperBound()) {
+                            dict.put(nSample, dict.get(nSample) + 1);
+                        }
+
+                    }
+                }
+                System.out.println(nExperiments + " experiments. With cvar " + variance + " and alpha " + alpha);
+                System.out.println(dict);
+                System.out.println();
             }
-            System.out.println(nExperiments + " experiments. With cvar " + variance + " and alpha " + alpha );
-            System.out.println(dict);
-            System.out.println();
+
+
         }
-
-
-
     }
 
 }
