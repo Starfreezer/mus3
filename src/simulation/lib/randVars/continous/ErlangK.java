@@ -22,6 +22,12 @@ public class ErlangK extends RandVar {
 		this.lambda = 2.0;
 	}
 
+
+	public ErlangK(RNG rng, double mean, double cvar) {
+		super(rng);
+		setMeanAndCvar(mean, cvar);
+	}
+
 	@Override
 	public double getRV() {
 		double product = 1.0;
