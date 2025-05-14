@@ -52,6 +52,14 @@ public class HyperExponential extends RandVar {
 
 	public HyperExponential(RNG rng, double mean, double cvar) {
 		super(rng);
+		// If cvar is 1, then the distribution reduces to a standard exponential, see calculateLambdas()
+		if (cvar < 1) {
+			throw new IllegalArgumentException("Coefficient of variation must be >= 1 for hyperexponential distribution.");
+		}
+		if (mean <= 0) {
+			throw new IllegalArgumentException("Mean must be > 0 for hyperexponential distribution.");
+		}
+
 		this.setMeanAndCvar(mean, cvar);
 	}
 
