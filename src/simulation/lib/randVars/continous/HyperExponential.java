@@ -113,7 +113,7 @@ public class HyperExponential extends RandVar {
 
 	@Override
 	public String getType() {
-		return "Hyperexponential distribution (H2)";
+		return "Hyperexponential distribution";
 	}
 
 
