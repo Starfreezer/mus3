@@ -60,7 +60,9 @@ public class HyperExponential extends RandVar {
 			throw new IllegalArgumentException("Mean must be > 0 for hyperexponential distribution.");
 		}
 
-		this.setMeanAndCvar(mean, cvar);
+		this.mean = mean;
+		this.cvar = cvar;
+		calculateLambdas();
 	}
 
 	@Override
