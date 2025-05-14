@@ -95,11 +95,13 @@ public class RandVarTest {
             System.out.println(counter1.report());
             System.out.println("\n\n");
             counter1.reset();
-            double cvar = var.getCvar();
+            
 
+            
             // Specify the folder where the histogram CSV files should be saved to avoid overwriting them
             // it makes plotting easier and more organized
             // Check the cvar value and set the directory name accordingly -> can only be used for 0.1, 1.0, 2.0
+            double cvar = var.getCvar();
             if (Math.abs(cvar - 0.1) < 1e-3) {
                 // System.out.println("Cvar is approximately: 0.1, Type: " + var.getType());
                 directoryName = "./histogram/hist-0_1";
