@@ -49,7 +49,7 @@ public class DCCTest {
                  * Change randvar here to appropriate dist
                  * Too lazy to extract function
                  */
-                Exponential randVar = new Exponential(rng);
+                Normal randVar = new Normal(rng);
                 randVar.setMeanAndCvar(mean, cvar);
 
                 for (int i = 0; i < nExperiments; i++) {
