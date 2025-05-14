@@ -2,6 +2,7 @@ package study;
 
 import simulation.lib.counter.DiscreteConfidenceCounter;
 import simulation.lib.counter.DiscreteCounter;
+import simulation.lib.randVars.continous.ErlangK;
 import simulation.lib.randVars.continous.Exponential;
 import simulation.lib.randVars.continous.HyperExponential;
 import simulation.lib.randVars.continous.Normal;
@@ -21,8 +22,8 @@ public class DCCTest {
 
     public static void testDCC() {
         RandVarTest test = new RandVarTest();
-        test.runTest();
-        // studentTest();
+        //test.runTest();
+        studentTest();
     }
 
     private static void studentTest() {
@@ -38,7 +39,6 @@ public class DCCTest {
 
 
         for (double cvar : cvars) {
-            skipIter = 0;
             try {
                 Dictionary<Integer, Integer> dict = new Hashtable<Integer, Integer>();
                 for (int sample : nSamples) {
@@ -49,8 +49,8 @@ public class DCCTest {
                  * Change randvar here to appropriate dist
                  * Too lazy to extract function
                  */
-                Normal randVar = new Normal(rng);
-                randVar.setMeanAndCvar(mean, cvar);
+                HyperExponential randVar = new HyperExponential(rng,mean,cvar);
+                //randVar.setMeanAndCvar(mean, cvar);
 
                 for (int i = 0; i < nExperiments; i++) {
                     for (int nSample : nSamples) {
@@ -68,41 +68,45 @@ public class DCCTest {
                 System.out.println(dict);
                 System.out.println();
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 // Lord forgive me for this hack i am lazy
-                skipIter = 1;
+
             }
         }
 
-        if (skipIter != 1) {
             alpha = 0.10;
             for (double variance : cvars) {
-                Dictionary<Integer, Integer> dict = new Hashtable<Integer, Integer>();
-                for (int sample : nSamples) {
-                    dict.put(sample, 0);
-                }
-
-                Normal normal = new Normal(rng, mean, variance);
-
-                for (int i = 0; i < nExperiments; i++) {
-                    for (int nSample : nSamples) {
-                        DiscreteConfidenceCounter discreteConfidenceCounter = new DiscreteConfidenceCounter("Var", alpha);
-                        for (int j = 0; j < nSample; j++) {
-                            discreteConfidenceCounter.count(normal.getRV());
-                        }
-                        if (mean >= discreteConfidenceCounter.getLowerBound() && mean <= discreteConfidenceCounter.getUpperBound()) {
-                            dict.put(nSample, dict.get(nSample) + 1);
-                        }
-
+                try {
+                    Dictionary<Integer, Integer> dict = new Hashtable<Integer, Integer>();
+                    for (int sample : nSamples) {
+                        dict.put(sample, 0);
                     }
+
+                    HyperExponential normal = new HyperExponential(rng,mean,variance);
+                    //normal.setMeanAndCvar(mean, variance);
+
+                    for (int i = 0; i < nExperiments; i++) {
+                        for (int nSample : nSamples) {
+                            DiscreteConfidenceCounter discreteConfidenceCounter = new DiscreteConfidenceCounter("Var", alpha);
+                            for (int j = 0; j < nSample; j++) {
+                                discreteConfidenceCounter.count(normal.getRV());
+                            }
+                            if (mean >= discreteConfidenceCounter.getLowerBound() && mean <= discreteConfidenceCounter.getUpperBound()) {
+                                dict.put(nSample, dict.get(nSample) + 1);
+                            }
+
+                        }
+                    }
+                    System.out.println(nExperiments + " experiments. With cvar " + variance + " and alpha " + alpha);
+                    System.out.println(dict);
+                    System.out.println();
+                } catch (Exception e) {
+                    //e.printStackTrace();
                 }
-                System.out.println(nExperiments + " experiments. With cvar " + variance + " and alpha " + alpha);
-                System.out.println(dict);
-                System.out.println();
             }
 
 
-        }
+
     }
 
 }
