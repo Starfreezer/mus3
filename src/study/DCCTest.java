@@ -22,7 +22,7 @@ public class DCCTest {
 
     public static void testDCC() {
         RandVarTest test = new RandVarTest();
-        //test.runTest();
+        test.runTest();
         studentTest();
     }
 
