@@ -9,6 +9,8 @@ import simulation.lib.randVars.continous.HyperExponential;
 import simulation.lib.randVars.continous.Uniform;
 import simulation.lib.rng.RNG;
 import simulation.lib.rng.StdRNG;
+import simulation.lib.histogram.DiscreteHistogram;
+import simulation.lib.histogram.Histogram;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,15 +79,23 @@ public class RandVarTest {
 
 
     public void runTest() {
+        int lowerBound = 0;
+        int upperBound = 10;
+        int interval = 100;
         for (RandVar var : vars) {
             DiscreteCounter counter1 = new DiscreteCounter(var.getType());
+            DiscreteHistogram histogram = new DiscreteHistogram(var.getType(), interval, lowerBound, upperBound);
             for(int k = 0; k < n; k++) {
-                counter1.count(var.getRV());
+                double rv = var.getRV();
+                counter1.count(rv);
+                histogram.count(rv);
             }
             System.out.println(var.toString());
             System.out.println(counter1.report());
             System.out.println("\n\n");
             counter1.reset();
+            histogram.csvReport("./");
+            histogram.reset();
         }
     }
 

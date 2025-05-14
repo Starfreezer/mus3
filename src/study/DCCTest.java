@@ -21,8 +21,8 @@ public class DCCTest {
 
     public static void testDCC() {
         RandVarTest test = new RandVarTest();
-        //test.runTest();
-        studentTest();
+        test.runTest();
+        // studentTest();
     }
 
     private static void studentTest() {
