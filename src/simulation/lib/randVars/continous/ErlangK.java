@@ -69,7 +69,7 @@ public class ErlangK extends RandVar {
 			throw new IllegalArgumentException("Mean must be > 0 and Coefficient of variation must be <= 1 and > 0 for ErlangK distribution.");
 
 		// For Erlang-k: CV = 1 / sqrt(k)
-		int optimalK = (int) Math.ceil(1.0 / (cvar * cvar));
+		int optimalK = (int) Math.floor(1.0 / (cvar * cvar));
 		this.k = optimalK;
 		this.lambda = (double) this.k / mean;
 	}
