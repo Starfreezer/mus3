@@ -97,10 +97,14 @@ public class RandVarTest {
             counter1.reset();
             
 
-            
+
             // Specify the folder where the histogram CSV files should be saved to avoid overwriting them
             // it makes plotting easier and more organized
             // Check the cvar value and set the directory name accordingly -> can only be used for 0.1, 1.0, 2.0
+            // If you want to plot the histograms you need to have the following directory structure !!!!!!!!!!!!!!!!!!!:
+            // ./histogram/hist-0_1
+            // ./histogram/hist-1
+            // ./histogram/hist-2
             double cvar = var.getCvar();
             if (Math.abs(cvar - 0.1) < 1e-3) {
                 // System.out.println("Cvar is approximately: 0.1, Type: " + var.getType());
@@ -115,6 +119,17 @@ public class RandVarTest {
                 System.out.println("Cvar does not match expected values: " + cvar + ", Type: " + var.getType() + ". You need to change the code to handle this case (other cvars).");
                 directoryName = "./histogram/hist-unknown-cvar";
             }
+
+            // Create the directory if it does not exist
+            java.io.File directory = new java.io.File(directoryName);
+            if (!directory.exists()) {
+                if (directory.mkdirs()) {
+                } else {
+                    System.err.println("Failed to create directory: " + directoryName);
+                }
+            }
+
+
             histogram.csvReport(directoryName);
             histogram.reset();
         }
