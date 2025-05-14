@@ -1,133 +1,72 @@
+import os
 import matplotlib.pyplot as plt
 
+base_dir = 'histogram'
 
-# Raw data
-data = """
-0,0;0,1;0,37017
-0,1;0,2;0,014775
-0,2;0,30000000000000004;0,014404
-0,30000000000000004;0,4;0,014386
-0,4;0,5;0,014525
-0,5;0,6000000000000001;0,014441
-0,6000000000000001;0,7000000000000001;0,014383
-0,7000000000000001;0,8;0,014285
-0,8;0,9;0,014336
-0,9;1,0;0,014452
-1,0;1,1;0,014429
-1,1;1,2000000000000002;0,014278
-1,2000000000000002;1,3;0,01434
-1,3;1,4000000000000001;0,014424
-1,4000000000000001;1,5;0,014393
-1,5;1,6;0,014379
-1,6;1,7000000000000002;0,014086
-1,7000000000000002;1,8;0,014547
-1,8;1,9000000000000001;0,014339
-1,9000000000000001;2,0;0,014449
-2,0;2,1;0,014529
-2,1;2,2;0,014374
-2,2;2,3000000000000003;0,01455
-2,3000000000000003;2,4000000000000004;0,014586
-2,4000000000000004;2,5;0,014639
-2,5;2,6;0,01448
-2,6;2,7;0,014589
-2,7;2,8000000000000003;0,014467
-2,8000000000000003;2,9000000000000004;0,014299
-2,9000000000000004;3,0;0,01407
-3,0;3,1;0,01423
-3,1;3,2;0,014699
-3,2;3,3000000000000003;0,014573
-3,3000000000000003;3,4000000000000004;0,014535
-3,4000000000000004;3,5;0,014367
-3,5;3,6;0,01449
-3,6;3,7;0,014371
-3,7;3,8000000000000003;0,014582
-3,8000000000000003;3,9000000000000004;0,014288
-3,9000000000000004;4,0;0,014458
-4,0;4,1000000000000005;0,014516
-4,1000000000000005;4,2;0,014391
-4,2;4,3;0,014437
-4,3;4,4;0,014432
-4,4;4,5;0,009227
-4,5;4,6000000000000005;0,0
-4,6000000000000005;4,7;0,0
-4,7;4,800000000000001;0,0
-4,800000000000001;4,9;0,0
-4,9;5,0;0,0
-5,0;5,1000000000000005;0,0
-5,1000000000000005;5,2;0,0
-5,2;5,300000000000001;0,0
-5,300000000000001;5,4;0,0
-5,4;5,5;0,0
-5,5;5,6000000000000005;0,0
-5,6000000000000005;5,7;0,0
-5,7;5,800000000000001;0,0
-5,800000000000001;5,9;0,0
-5,9;6,0;0,0
-6,0;6,1000000000000005;0,0
-6,1000000000000005;6,2;0,0
-6,2;6,300000000000001;0,0
-6,300000000000001;6,4;0,0
-6,4;6,5;0,0
-6,5;6,6000000000000005;0,0
-6,6000000000000005;6,7;0,0
-6,7;6,800000000000001;0,0
-6,800000000000001;6,9;0,0
-6,9;7,0;0,0
-7,0;7,1000000000000005;0,0
-7,1000000000000005;7,2;0,0
-7,2;7,300000000000001;0,0
-7,300000000000001;7,4;0,0
-7,4;7,5;0,0
-7,5;7,6000000000000005;0,0
-7,6000000000000005;7,7;0,0
-7,7;7,800000000000001;0,0
-7,800000000000001;7,9;0,0
-7,9;8,0;0,0
-8,0;8,1;0,0
-8,1;8,200000000000001;0,0
-8,200000000000001;8,3;0,0
-8,3;8,4;0,0
-8,4;8,5;0,0
-8,5;8,6;0,0
-8,6;8,700000000000001;0,0
-8,700000000000001;8,8;0,0
-8,8;8,9;0,0
-8,9;9,0;0,0
-9,0;9,1;0,0
-9,1;9,200000000000001;0,0
-9,200000000000001;9,3;0,0
-9,3;9,4;0,0
-9,4;9,5;0,0
-9,5;9,600000000000001;0,0
-9,600000000000001;9,700000000000001;0,0
-9,700000000000001;9,8;0,0
-9,8;9,9;0,0
-9,9;10,0;0,0
+# Folder-specific cvar values
+folder_cvar = {
+    'hist-0_1': 'cvar=0.1',
+    'hist-1': 'cvar=1',
+    'hist-2': 'cvar=2'
+}
 
-"""
+# Traverse the directory structure
+for root, dirs, files in os.walk(base_dir):
+    for file in files:
+        if file.endswith('_hist.csv'):
+            file_path = os.path.join(root, file)
+            print("Processing file:", file_path)
+            
+            # Extract the immediate subfolder name after 'histogram'
+            relative_path = os.path.relpath(root, base_dir)
+            folder_name = relative_path.split(os.sep)[0]  # Get the first folder after 'histogram'
+            
+            print("Processing:", folder_name)
+            if folder_name not in folder_cvar:
+                continue  # Skip if folder is not in the predefined list
 
-# Parse the data
-lines = data.strip().splitlines()
-bins = []
-heights = []
+            # Get the cvar for the folder
+            cvar = folder_cvar.get(folder_name, 'cvar=unknown')
+            
+            # Create the title for the plot
+            title_file = file.replace('_hist.csv', '')
+            title = f"{title_file} {cvar}"
+            
+            # Read and parse the file
+            with open(file_path, 'r', encoding='utf-8') as f:
+                lines = f.readlines()
 
-for line in lines:
-    parts = line.strip().split(';')
-    lower = float(parts[0].replace(',', '.'))
-    upper = float(parts[1].replace(',', '.'))
-    height = float(parts[2].replace(',', '.').replace('E', 'e'))
-    bins.append(lower)
-    heights.append(height)
+            # Skip comment lines
+            data_lines = [line for line in lines if not line.strip().startswith('#') and line.strip()]
 
-# Add the last bin edge
-bins.append(float(lines[-1].split(';')[1].replace(',', '.')))
+            bins = []
+            heights = []
 
-# Plotting
-plt.figure(figsize=(10, 6))
-plt.bar(bins[:-1], heights, width=[bins[i+1]-bins[i] for i in range(len(bins)-1)], align='edge', edgecolor='black')
-plt.xlabel("Time (s)")
-plt.ylabel("Relative Frequency")
-plt.title("Discrete-Time Histogram of Erlang-1 Distribution")
-plt.grid(True, linestyle='--', alpha=0.6)
-plt.tight_layout()
-plt.show()
+            for line in data_lines:
+                parts = line.strip().split(';')
+                lower = float(parts[0].replace(',', '.'))
+                upper = float(parts[1].replace(',', '.'))
+                height = float(parts[2].replace(',', '.').replace('E', 'e'))
+                bins.append(lower)
+                heights.append(height)
+
+            bins.append(float(data_lines[-1].split(';')[1].replace(',', '.')))
+
+            # Plotting
+            plt.figure(figsize=(10, 6))
+            plt.bar(bins[:-1], heights, width=[bins[i+1]-bins[i] for i in range(len(bins)-1)],
+                    align='edge', edgecolor='black')
+            plt.xlabel("Time (s)")
+            plt.ylabel("Relative Frequency")
+            plt.xticks(ticks=[x * 0.5 for x in range(int(bins[0] * 2), int(bins[-1] * 2) + 1)])
+            plt.title(title)
+            plt.grid(True, linestyle='--', alpha=0.6)
+            plt.tight_layout()
+
+            # Replace spaces with underscores and remove parentheses in the output filename
+            output_file = f"{folder_name}_{file.replace('_hist.csv', '')}_histogram.png"
+            output_file = output_file.replace(" ", "_").replace("(", "").replace(")", "")
+            plt.savefig(output_file)
+            plt.close()
+
+print("Histograms generated and saved.")
